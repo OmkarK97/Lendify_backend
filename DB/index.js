@@ -1,7 +1,15 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
 
-mongoose.connect(process.env.MONGODBURL)
+const mongo_url = process.env.MONGODBURL;
+
+if (!mongo_url) {
+    throw new Error('MONGODBURL is not defined in .env file');
+}
+
+mongoose.connect(mongo_url, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log('Database connected successfully'))
+    .catch(err => console.error('Database connection error:', err));
 
 const ProtocolSchema = new mongoose.Schema({
     USDC_Deposit_Total: Number,
